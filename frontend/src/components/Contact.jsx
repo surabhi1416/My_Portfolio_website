@@ -2,28 +2,80 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
-import { portfolioData } from '../data/mock';
+import { usePersonalInfo } from '../hooks/usePortfolioData';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorMessage from './ErrorMessage';
 
 const Contact = () => {
-  const { personal } = portfolioData;
+  const { personalInfo, loading, error } = usePersonalInfo();
+
+  if (loading) {
+    return (
+      <section id="contact" className="py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+            <p className="text-xl text-muted-foreground">
+              I'm always open to new opportunities, collaborations, or just tech talk!
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <LoadingSpinner size="lg" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="contact" className="py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+            <p className="text-xl text-muted-foreground">
+              I'm always open to new opportunities, collaborations, or just tech talk!
+            </p>
+          </div>
+          <ErrorMessage error={error} />
+        </div>
+      </section>
+    );
+  }
+
+  if (!personalInfo) {
+    return (
+      <section id="contact" className="py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+            <p className="text-xl text-muted-foreground">
+              I'm always open to new opportunities, collaborations, or just tech talk!
+            </p>
+          </div>
+          <ErrorMessage error="Contact information not available" />
+        </div>
+      </section>
+    );
+  }
 
   const contactInfo = [
     {
       icon: Mail,
       label: 'Email',
-      value: personal.email,
-      href: `mailto:${personal.email}`
+      value: personalInfo.email,
+      href: `mailto:${personalInfo.email}`
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: personal.phone,
-      href: `tel:${personal.phone}`
+      value: personalInfo.phone,
+      href: `tel:${personalInfo.phone}`
     },
     {
       icon: MapPin,
       label: 'Location',
-      value: personal.location,
+      value: personalInfo.location,
       href: null
     }
   ];
@@ -32,13 +84,13 @@ const Contact = () => {
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      href: personal.linkedin,
+      href: personalInfo.linkedin,
       color: 'bg-blue-600 hover:bg-blue-700'
     },
     {
       icon: Github,
       label: 'GitHub',
-      href: personal.github,
+      href: personalInfo.github,
       color: 'bg-gray-800 hover:bg-gray-900'
     }
   ];
@@ -109,7 +161,7 @@ const Contact = () => {
                 <Button
                   size="lg"
                   className="w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white"
-                  onClick={() => window.open(`mailto:${personal.email}`, '_blank')}
+                  onClick={() => window.open(`mailto:${personalInfo.email}`, '_blank')}
                 >
                   <Mail className="mr-2 h-5 w-5" />
                   Send Email
