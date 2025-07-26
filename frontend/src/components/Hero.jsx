@@ -42,9 +42,6 @@ const Hero = () => {
       <div className="container mx-auto max-w-4xl text-center">
         <div className="space-y-8">
           <div className="space-y-4">
-            <Badge variant="outline" className="text-sm px-4 py-2">
-              👩‍💻 Available for opportunities
-            </Badge>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
               {personalInfo.name}
             </h1>
